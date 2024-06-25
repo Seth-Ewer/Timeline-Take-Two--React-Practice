@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './Timeline.css';
 import Timenode from '../Timenode/Timenode';
+import NodeDetails from '../NodeDetails/NodeDetails';
 
 function Timeline() {
 
@@ -29,7 +30,13 @@ function Timeline() {
     const [tempNodeName, setTempNodeName] = useState("nihil");
     const [tempNodeDate, setTempNodeDate] = useState("2000-01-01");
     const [tempNodeDesc, setTempNodeDesc] = useState("But there was nothing there...");
-    const [deleteTarget, setDeleteTarget] = useState(1);
+    const [targetNode, setTargetNode] = useState({
+        pos: 0,
+        name: "nihil",
+        date: "2022-12-12",
+        desc: "But there was nothing there..."
+    });
+    
     const addNode = () => {
         var tempNodes = [];
         var marker = 0;
@@ -54,24 +61,40 @@ function Timeline() {
         setTempNodeId(tempNodeId+1);
     }
 
-    const deleteNode = () => {
+    const deleteNode = (tnode) => {
         var tempNodes = [];
         for(var i = 0; i<nodes.length; i++) {
-                if(nodes[i].id > deleteTarget) {
-                    tempNodes.push({
-                        id: nodes[i].id-1,
-                        name: nodes[i].name,
-                        date: nodes[i].date,
-                        desc: nodes[i].desc,
-                    });
-                }else if(nodes[i].id !== deleteTarget) {
-                    tempNodes.push(nodes[i]);
-                }
+            if(i > targetNode.pos) {
+                tempNodes.push({
+                    id: nodes[i].id-1,
+                    name: nodes[i].name,
+                    date: nodes[i].date,
+                    desc: nodes[i].desc,
+                });
+            }else if(i !== targetNode.pos) {
+                tempNodes.push(nodes[i]);
             }
+        }
         setNodes(tempNodes);
         setTempNodeId(tempNodeId-1);
     }
     
+    const updateNode = (tnode, tname, tdate, tdesc) => {
+        var tempNodes = [];
+        for(var i = 0; i<nodes.length; i++) {
+            if(i == tnode){
+                tempNodes.push({
+                    id: nodes[i].id,
+                    name: tname,
+                    date: tdate,
+                    desc: tdesc
+                })
+            } else {
+                tempNodes.push(nodes[i]);
+            }
+        }
+        setNodes(tempNodes);
+    }
 
     return (
         <div className='LineMain'>
@@ -85,8 +108,11 @@ function Timeline() {
                 <input name="dateEntry" value={tempNodeDate} onChange={e => setTempNodeDate(e.target.value)}></input>
                 <input name="descEntry" value={tempNodeDesc} onChange={e => setTempNodeDesc(e.target.value)}></input>
                 <button onClick={addNode}>add new</button>
-                <input name="nodeId" value={deleteTarget} onChange={e => setDeleteTarget(e.target.value)}></input>
-                <button onClick={deleteNode}>delete node</button>
+                <button onClick={e => setTargetNode(targetNode)}>refresh Target?</button>
+                <NodeDetails
+                    deleteNode={deleteNode}
+                    updateNode={updateNode}
+                    targetNode={targetNode}/>
             </div>
         </div>
     );

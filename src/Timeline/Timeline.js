@@ -26,68 +26,60 @@ function Timeline() {
         }
     ]);
 
-    const [tempNodeId, setTempNodeId] = useState(3);
     const [tempNodeName, setTempNodeName] = useState("nihil");
     const [tempNodeDate, setTempNodeDate] = useState("2000-01-01");
     const [tempNodeDesc, setTempNodeDesc] = useState("But there was nothing there...");
-    const [targetNode, setTargetNode] = useState({
-        pos: 0,
-        name: "nihil",
-        date: "2022-12-12",
-        desc: "But there was nothing there..."
-    });
+    const [targetNode, setTargetNode] = useState(0);
+    const [targetName, setTargetName] = useState("nihil");
+    const [targetDate, setTargetDate] = useState("2022-12-12");
+    const [targetDesc, setTargetDesc] = useState("But there was nothing there...");
     
     const addNode = () => {
         var tempNodes = [];
-        var marker = 0;
-        for(var i=0; i<=tempNodeId; i++) {
-                if(i == tempNodeId || tempNodeDate < nodes[i].date){
+        for(var i=0; i<=nodes.length; i++) {
+                if(i == nodes.length || tempNodeDate < nodes[i].date){
                     tempNodes.push({
-                        id: tempNodeId,
+                        id: i,
                         name: tempNodeName,
                         date: tempNodeDate,
                         desc: tempNodeDesc
                     });
-                    marker = i;
-                    break;
                 }else{
-                    tempNodes.push(nodes[i]);
+                    tempNodes.push({
+                        id: i,
+                        name: nodes[i].name,
+                        date: nodes[i].date,
+                        desc: nodes[i].desc
+                    });
                 }
             }
-        for(var i = marker; i<tempNodeId; i++) {
-                tempNodes.push(nodes[i]);
-            }
         setNodes(tempNodes);
-        setTempNodeId(tempNodeId+1);
     }
 
-    const deleteNode = (tnode) => {
+    const deleteNode = () => {
         var tempNodes = [];
         for(var i = 0; i<nodes.length; i++) {
-            if(i > targetNode.pos) {
+            if(i !== targetNode) {
                 tempNodes.push({
-                    id: nodes[i].id-1,
+                    id: i,
                     name: nodes[i].name,
                     date: nodes[i].date,
                     desc: nodes[i].desc,
                 });
-            }else if(i !== targetNode.pos) {
-                tempNodes.push(nodes[i]);
             }
         }
         setNodes(tempNodes);
-        setTempNodeId(tempNodeId-1);
     }
     
-    const updateNode = (tnode, tname, tdate, tdesc) => {
+    const updateNode = () => {
         var tempNodes = [];
         for(var i = 0; i<nodes.length; i++) {
-            if(i == tnode){
+            if(i == targetNode){
                 tempNodes.push({
-                    id: nodes[i].id,
-                    name: tname,
-                    date: tdate,
-                    desc: tdesc
+                    id: i,
+                    name: targetName,
+                    date: targetDate,
+                    desc: targetDesc
                 })
             } else {
                 tempNodes.push(nodes[i]);
@@ -108,11 +100,23 @@ function Timeline() {
                 <input name="dateEntry" value={tempNodeDate} onChange={e => setTempNodeDate(e.target.value)}></input>
                 <input name="descEntry" value={tempNodeDesc} onChange={e => setTempNodeDesc(e.target.value)}></input>
                 <button onClick={addNode}>add new</button>
-                <button onClick={e => setTargetNode(targetNode)}>refresh Target?</button>
+                <button onClick={e => setTargetNode({
+                    pos: 1,
+                    name: "a",
+                    date: "2055-12-12",
+                    desc: "Wait, what?"})}>refresh Target?</button>
                 <NodeDetails
                     deleteNode={deleteNode}
                     updateNode={updateNode}
-                    targetNode={targetNode}/>
+                    targetNode={targetNode}
+                    setTargetNode={setTargetNode}
+                    targetName={targetName}
+                    setTargetName={setTargetName}
+                    targetDate={targetDate}
+                    setTargetDate={setTargetDate}
+                    targetDesc={targetDesc}
+                    setTargetDesc={setTargetDesc}
+                />
             </div>
         </div>
     );

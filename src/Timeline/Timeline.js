@@ -33,6 +33,7 @@ function Timeline() {
     const [targetName, setTargetName] = useState("nihil");
     const [targetDate, setTargetDate] = useState("2022-12-12");
     const [targetDesc, setTargetDesc] = useState("But there was nothing there...");
+    const [detailsEnabled, setDetailsEnabled] = useState(false);
     
     const addNode = () => {
         var tempNodes = [];
@@ -88,11 +89,24 @@ function Timeline() {
         setNodes(tempNodes);
     }
 
+    const selectNode = (id) => {
+        setTargetNode(id);
+        setTargetName(nodes[id].name);
+        setTargetDate(nodes[id].date);
+        setTargetDesc(nodes[id].desc);
+
+        toggleDetails();
+    }
+
+    const toggleDetails = () => {
+        setDetailsEnabled(!detailsEnabled);
+    }
+
     return (
         <div className='LineMain'>
             {nodes.map(node => (
                 <div className="NodeBox" key={node.id}>
-                <Timenode name={node.name} date={node.date} desc={node.desc} id={node.id} />
+                <Timenode name={node.name} date={node.date} desc={node.desc} id={node.id} selectNode={selectNode}/>
                 </div>
             ))}
             <div className="NodeBox">
@@ -108,8 +122,6 @@ function Timeline() {
                 <NodeDetails
                     deleteNode={deleteNode}
                     updateNode={updateNode}
-                    targetNode={targetNode}
-                    setTargetNode={setTargetNode}
                     targetName={targetName}
                     setTargetName={setTargetName}
                     targetDate={targetDate}

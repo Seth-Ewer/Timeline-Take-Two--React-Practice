@@ -1,4 +1,3 @@
-import { useState } from "react";
 import './NodeDetails.css';
 
 function NodeDetails(props) {

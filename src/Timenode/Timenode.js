@@ -1,13 +1,15 @@
-import './Timenode.css';
-
 function Timenode(props) {
     return (
-        <div className='Main'>
-            <h3>{props.name}</h3>
-            <h4>{props.date}</h4>
-            <p>{props.desc}</p>
-            <p>{props.id}</p>
-            <button onClick={props.selectNode(props.id)}>select</button>
+        <div className="card m-6" onClick={e => props.selectNode(props.id)}>
+            <header className="card-header has-background-primary-dark">
+                    <p className="card-header-title">{props.name}</p>
+                    <p className="card-header-icon">{props.date}</p>
+            </header>
+            <div className="card-content">
+                <div className='content has-text-centered'>
+                    <p>{props.desc}</p>
+                </div>
+            </div>
         </div>
     );
 }

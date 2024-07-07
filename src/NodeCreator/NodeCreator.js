@@ -20,7 +20,7 @@ function NodeCreator(props) {
                     <input className='input has-background-light has-text-black' type="date" name="date" value={tempNodeDate} onChange={e => setTempNodeDate(e.target.value)}></input>
                     <label className='label'>Description</label>
                     <textarea className='textarea has-background-light has-text-black' name="desc" value={tempNodeDesc} onChange={e => setTempNodeDesc(e.target.value)}></textarea>
-                    <footer className='card-footer'>
+                    <footer className='card-footer'>    
                         <button className='card-footer-item' onClick={props.close}>Close</button>
                         <button className='card-footer-item has-text-success' onClick={e => props.addNode(tempNodeName, tempNodeDate, tempNodeDesc)}>Add</button>
                     </footer>
